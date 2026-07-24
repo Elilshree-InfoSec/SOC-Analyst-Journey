@@ -28,12 +28,13 @@ Secure a SOC Analyst Internship by building strong cybersecurity fundamentals an
 | 3 | 9 Jul 2026 | 22 Jul 2026 | ParkUM | Project | Java, OOP, Data Structures | ✅ |
 | 4 | 19 Jul 2026 | 20 Jul 2026 | Understanding Threats and Attacks | Certification | Threats & vulnerabilities | ✅ |
 | 5 | 20 Jul 2026 | 21 Jul 2026 | Security Operations and the Defense Analyst | Certification | SOC fundamentals | ✅ |
+| 6 | 21 Jul 2026 | 24 Jul 2026 | Data and Tools for Defense Analyst | Certification | SOC Tools & Analysis | ✅ |
 
 ---
 
 ## 📌 Progress
 
-- 🎓 Certifications: 4 / 8
+- 🎓 Certifications: 5 / 8
 - 🛠️ Projects: 1
 - 🧪 Labs: 0
 - 💻 Security Tools: 0
