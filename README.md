@@ -26,11 +26,11 @@ Secure a SOC Analyst Internship by building strong cybersecurity fundamentals an
 | No. | Start Date | Completion Date | Activity | Category | Skills Learned | Status |
 |---|---|---|---|---|---|---|
 | 1 | 5 Jul 2026 | 8 Jul 2026 | Cisco — Python Essentials 1 | Certification | Python fundamentals | ✅ |
-| 2 | 8 Jul 2026 | 9 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: The Cybersecurity Landscape | Certification | Cybersecurity fundamentals | ✅ |
-| 3 | 19 Jul 2026 | 20 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Understanding Threats and Attacks | Certification | Threats & vulnerabilities | ✅ |
-| 4 | 20 Jul 2026 | 21 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Security Operations and the Defense Analyst | Certification | SOC fundamentals | ✅ |
-| 5 | 21 Jul 2026 | 24 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Data and Tools for Defense Analysts | Certification | SOC tools & analysis | ✅ |
-| 6 | 24 Jul 2026 | 25 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: The Art of Investigation | Certification | Investigation process | ✅ |
+| 2 | 8 Jul 2026 | 9 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: The Cybersecurity Landscape | Learning Pathway | Cybersecurity fundamentals | ✅ |
+| 3 | 19 Jul 2026 | 20 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Understanding Threats and Attacks | Learning Pathway | Threats & vulnerabilities | ✅ |
+| 4 | 20 Jul 2026 | 21 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Security Operations and the Defense Analyst | Learning Pathway | SOC fundamentals | ✅ |
+| 5 | 21 Jul 2026 | 24 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Data and Tools for Defense Analysts | Learning Pathway | SOC tools & analysis | ✅ |
+| 6 | 24 Jul 2026 | 25 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: The Art of Investigation | Learning Pathway | Investigation process | ✅ |
 
 
 ## Additional Learning & Projects
@@ -43,7 +43,7 @@ Secure a SOC Analyst Internship by building strong cybersecurity fundamentals an
 
 ## 📌 Progress
 
-- 🎓 Certifications: 7 / 9
+- 🎓 Certifications: 2
 - 🛠️ Projects: 1
 - 🧪 Labs: 0
 - 💻 Security Tools: 0
