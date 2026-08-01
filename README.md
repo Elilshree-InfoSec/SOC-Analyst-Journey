@@ -31,6 +31,9 @@ Secure a SOC Analyst Internship by building strong cybersecurity fundamentals an
 | 4 | 20 Jul 2026 | 21 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Security Operations and the Defense Analyst | Learning Pathway | SOC fundamentals | ✅ |
 | 5 | 21 Jul 2026 | 24 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Data and Tools for Defense Analysts | Learning Pathway | SOC tools & analysis | ✅ |
 | 6 | 24 Jul 2026 | 25 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: The Art of Investigation | Learning Pathway | Investigation process | ✅ |
+| 7 | 26 Jul 2026 | 30 Jul 2026 | Splunk Learning - SIEM , SPL Language , Lab | Splunk | ✅ |
+| 8 | 29 Jul 2026 | 31 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Introduction to Threat Hunting | Learning Pathway Completed | ✅ |
+| 9 | 29 Jul 2026 | 1 Aug 2026 | Python - SOC Log Analyzer | Project | ✅ |
 
 
 ## Additional Learning & Projects
@@ -41,11 +44,11 @@ Secure a SOC Analyst Internship by building strong cybersecurity fundamentals an
 | 3 | 23 Jul 2026 | 23 Jul 2026 | National Training Week 2026 (NTW) — An Introduction to Cyberlaw: Rights, Responsibilities & Legal Risks in Cyberspace | Workshop | Cyberlaw basics | ✅ |
 ---
 
-## 📌 Progress
+## 📌 Progress - SOC Only
 
 - 🎓 Certifications: 2
 - 🛠️ Projects: 1
-- 🧪 Labs: 0
-- 💻 Security Tools: 0
+- 🧪 Labs: 2
+- 💻 Security Tools: 1
 
 *(This section will be updated throughout my learning journey.)*
