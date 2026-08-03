@@ -5,7 +5,7 @@
 
 - Created by Guido van Rossum (1989).
 - Open-source, easy to learn, and highly readable.
-- Python 3 is the current standard (don't use Python 2 for new projects).
+- Python 3 is the current standard.
 - Widely used in automation, scripting, log analysis, cybersecurity, and SOC.
 
 ### 1.1 Hello World
