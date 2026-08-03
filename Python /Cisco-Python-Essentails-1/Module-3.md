@@ -1,4 +1,4 @@
-Module 3 : Boolean Values, Conditional Execution, Loops, Lists and List Processing, Logical and Bitwise Operations
+# Module 3 : Boolean Values, Conditional Execution, Loops, Lists and List Processing, Logical and Bitwise Operations
 
 ---
 
