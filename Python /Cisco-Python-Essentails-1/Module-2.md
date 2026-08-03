@@ -521,7 +521,7 @@ score += 5
 x = 10      # int
 x = "hello" # string
 ```
-- No need to declare: ~~`int x = 10`~~ ❌
+- No need to declare: ~`int x = 10`~ ❌
 
 ## 4.9 Important Interview Points ⭐
 
