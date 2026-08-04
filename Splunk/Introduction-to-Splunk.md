@@ -132,8 +132,6 @@ Example:
 ```
 ---
 
----
-
 ## 6. 🧩 SPL Structure
 
 SPL commands are chained with a **pipe `|`**, passing results from one stage to the next.
