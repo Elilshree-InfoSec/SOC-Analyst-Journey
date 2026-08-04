@@ -275,6 +275,6 @@ This room gave me a much better understanding of how analysts use **Splunk SPL**
 
 # 📅 Progress
 
-Room Completed: ✅ 
-Difficulty: Intermediate 
-Time Taken: 1 hour
+- Room Completed: ✅ 
+- Difficulty: Intermediate 
+- Time Taken: 1 hour
