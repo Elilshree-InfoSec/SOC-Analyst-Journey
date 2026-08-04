@@ -1,4 +1,4 @@
-# Exploring SPL
+# 📖 Exploring SPL
 
 Study notes on Splunk's Search Processing Language (SPL) — how to search, filter, transform, and analyze log data for SOC investigations.
 
