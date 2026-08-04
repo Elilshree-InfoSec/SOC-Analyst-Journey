@@ -1,4 +1,4 @@
-# TryHackMe - Splunk: Exploring SPL
+# 🔍 TryHackMe - Splunk: Exploring SPL
 
 ## 🎯 Learning Objectives
 - Understand **Search Processing Language (SPL)**.
@@ -8,7 +8,7 @@
 
 ---
 
-# 1. Splunk Search & Reporting
+# 🖥️ 1. Splunk Search & Reporting
 
 ## Main Components
 
@@ -31,7 +31,7 @@
 
 ---
 
-# 2. Basic Searches
+# 🔎 2. Basic Searches
 
 ## Search an Index
 
@@ -49,7 +49,7 @@ Searches for the keyword **alice** anywhere in the logs.
 
 ---
 
-# 3. Search Operators
+# ⚔️ 3. Search Operators
 
 ## Relational Operators
 
@@ -81,7 +81,7 @@ index=windowslogs AccountName!=SYSTEM
 
 ---
 
-## Wildcards & CIDR
+## 🌐 Wildcards & CIDR
 
 | Syntax | Purpose | Example |
 |--------|---------|---------|
@@ -91,7 +91,7 @@ index=windowslogs AccountName!=SYSTEM
 
 ---
 
-# 4. Quotes & Parentheses
+# 📝 4. Quotes & Parentheses
 
 ## Exact Phrase
 
@@ -105,11 +105,11 @@ index=windowslogs AccountName!=SYSTEM
 (alice AND bob) OR charlie
 ```
 
-Use parentheses to control evaluation order.
+💡 Use parentheses to control the order of evaluation.
 
 ---
 
-# 5. Pipe Operator
+# 🔗 5. Pipe Operator (`|`)
 
 Commands are chained using:
 
@@ -124,34 +124,34 @@ index=windowslogs
 | fields User SourceIp
 ```
 
-Each command passes its output to the next command.
+➡️ Each command passes its output to the next command.
 
 ---
 
-# 6. Filtering Commands
+# 🎯 6. Filtering Commands
 
 | Command | Purpose | Example |
 |---------|----------|---------|
 | `fields` | Show selected fields | `| fields User SourceIp` |
 | `dedup` | Remove duplicate values | `| dedup SourceIp` |
 | `rename` | Rename fields | `| rename User as Employee` |
-| `regex` | Filter using regex | `| regex Image="\.exe$"` |
+| `regex` | Filter using Regular Expressions | `| regex Image="\.exe$"` |
 
 ---
 
-# 7. Structuring Commands
+# 📑 7. Structuring Commands
 
 | Command | Purpose | Example |
 |---------|----------|---------|
 | `table` | Display selected fields | `| table _time EventID Hostname` |
-| `head` | First/newest events | `| head 20` |
-| `tail` | Last/oldest events | `| tail 20` |
+| `head` | Show first/newest events | `| head 20` |
+| `tail` | Show last/oldest events | `| tail 20` |
 | `sort` | Sort results | `| sort User` |
-| `reverse` | Reverse order | `| reverse` |
+| `reverse` | Reverse event order | `| reverse` |
 
 ---
 
-# 8. Subsearch
+# 🔄 8. Subsearch
 
 Used to correlate data from multiple searches.
 
@@ -160,11 +160,11 @@ Used to correlate data from multiple searches.
     [ search ... ]
 ```
 
-Commonly used to combine different log sources.
+💡 Useful for combining multiple log sources into one investigation.
 
 ---
 
-# 9. Transforming Commands
+# 📊 9. Transforming Commands
 
 | Command | Purpose | Example |
 |---------|----------|---------|
@@ -180,24 +180,24 @@ Commonly used to combine different log sources.
 | Function | Purpose |
 |----------|---------|
 | count | Count events |
-| avg | Average |
-| sum | Sum values |
+| avg | Average value |
+| sum | Total values |
 | max | Maximum value |
 | min | Minimum value |
 
 ---
 
-# 10. Data Enrichment
+# 🌍 10. Data Enrichment
 
 | Command | Purpose | Example |
 |---------|----------|---------|
 | `iplocation` | Add IP geolocation | `| iplocation SourceIp` |
-| `lookup` | Enrich using CSV lookup | `| lookup user_roles Hostname OUTPUT UserRole` |
-| `eval` | Create/modify fields | `| eval LogonTypeDesc="Network Logon"` |
+| `lookup` | Enrich data using CSV lookup | `| lookup user_roles Hostname OUTPUT UserRole` |
+| `eval` | Create or modify fields | `| eval LogonTypeDesc="Network Logon"` |
 
 ---
 
-# 11. Anomaly Detection
+# 🚨 11. Anomaly Detection
 
 ## Useful Commands
 
@@ -215,13 +215,13 @@ Example:
 
 Detects users logging in from unusual countries.
 
-### Z-Score Formula
+### 📈 Z-Score Formula
 
 ```text
 zscore = |observed - average| / standard deviation
 ```
 
-Higher Z-score = More anomalous.
+➡️ Higher Z-score = More anomalous.
 
 ---
 
@@ -251,3 +251,32 @@ Higher Z-score = More anomalous.
 | eventstats | Statistics while keeping events |
 | where | Advanced filtering |
 | join | Combine searches |
+
+---
+
+# 🧠 Key Takeaways
+
+- ✅ SPL is Splunk's query language for searching and analyzing logs.
+- 🔗 Commands are chained using the **pipe (`|`)** operator.
+- 📋 `fields` and `table` help simplify investigation results.
+- 📊 `stats`, `chart`, and `timechart` summarize and visualize data.
+- 🛠️ `eval` creates calculated fields for better analysis.
+- 🌍 `lookup` and `iplocation` enrich log data with additional context.
+- 🚨 `eventstats` + `where` are useful for anomaly detection.
+- 🔄 `join` allows correlation between multiple log sources.
+
+---
+
+# 💭 Personal Reflection
+
+This room gave me a much better understanding of how analysts use **Splunk SPL** to investigate logs efficiently. Instead of scrolling through thousands of raw events, SPL allows me to filter, organize, summarize, and visualize data to quickly identify suspicious activity. Learning commands such as **stats**, **eval**, **timechart**, and **eventstats** showed me how powerful SPL is for real-world SOC investigations. As someone preparing for a **SOC Analyst internship**, this room strengthened my confidence in writing basic SPL queries and understanding how security analysts investigate incidents.
+
+---
+
+# 📅 Progress
+
+| Item | Status |
+|------|--------|
+| Room Completed | ✅ |
+| Difficulty | 🟢 Intermediate |
+| Time Taken | ⏱️ 1 hour |
