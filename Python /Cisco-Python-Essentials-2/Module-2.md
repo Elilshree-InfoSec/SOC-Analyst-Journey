@@ -5,7 +5,7 @@
 
 ## 1. Characters, Encoding & I18N
 
-# Character Representation & Code Standards
+## Character Representation & Code Standards
 
 | Category | Key Concept / Standard | Core Details & Characteristics | Technical Specifications / Examples |
 | :--- | :--- | :--- | :--- |
