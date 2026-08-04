@@ -1,267 +1,473 @@
-# 🔍 TryHackMe — Splunk: Exploring SPL
+# Splunk SPL Notes — TryHackMe: Exploring SPL
 
-## 🎯 Objectives
-- Understand **Search Processing Language (SPL)**.
-- Search, filter & transform log data.
-- Visualize with charts/stats.
-- Detect anomalies with SPL.
+Study notes on Splunk's Search Processing Language (SPL) — how to search, filter, transform, and analyze log data for SOC investigations.
 
-> 💡 Networks make **thousands of logs/min**. SPL lets you **filter → organize → summarize → visualize** so only relevant events surface.
+## Table of Contents
+
+- [Learning Objectives](#learning-objectives)
+- [1. Search & Reporting App](#1-search--reporting-app)
+- [2. Basic Searches](#2-basic-searches)
+- [3. Search Operators](#3-search-operators)
+- [4. Quotes, Parentheses & Order of Evaluation](#4-quotes-parentheses--order-of-evaluation)
+- [5. The Pipe Operator](#5-the-pipe-operator)
+- [6. Filtering Commands](#6-filtering-commands)
+- [7. Structuring Commands](#7-structuring-commands)
+- [8. Subsearches](#8-subsearches)
+- [9. Transforming Commands](#9-transforming-commands)
+- [10. Data Enrichment](#10-data-enrichment)
+- [11. Anomaly Detection](#11-anomaly-detection)
+- [Full Command Reference](#full-command-reference)
+- [Personal Reflection](#personal-reflection)
+- [Progress](#progress)
 
 ---
 
-## 🧠 1. The Pipeline Model (Most Important Concept)
-Commands are chained with a **pipe `|`** — output of one becomes input of the next.
+## Learning Objectives
 
-```spl
-index=windowslogs               # 1. get raw events
-| fields User SourceIp          # 2. keep only these columns
-| dedup SourceIp                # 3. remove duplicate IPs
-| table User SourceIp           # 4. display cleanly
-```
+- Understand how SPL processes and filters log data
+- Chain and apply SPL commands effectively
+- Visualize log data with charts and statistics
+- Apply SPL skills to anomaly detection
+
+**Prerequisites:** Introduction to SIEM, Splunk Basics
 
 ---
 
-## 🖥️ 2. Search & Reporting Interface
+## 1. Search & Reporting App
+
+The Search & Reporting app is Splunk's default interface for querying and analyzing ingested data.
 
 | Component | Purpose |
-|-----------|---------|
-| Search Head | Where you type SPL |
-| Time Picker | Select timeframe (smaller = faster) |
-| Search History | Reuse old queries |
-| Data Summary | Lists hosts, sources, sourcetypes |
-| Fields Sidebar | Click fields to build queries fast |
+|---|---|
+| Search Head | Where SPL queries are entered |
+| Time Picker | Sets the time range for a search (remember to set to **All time** when needed) |
+| Search History | Stores previously run queries |
+| Data Summary | Overview of available hosts, sources, and sourcetypes |
 
-**Field Types:** `#` = numeric (can do math) · `α` = text/string · *Selected* = shown by default · *Interesting* = auto-detected (>20% of events).
+### Fields Sidebar
+
+Appears on the left of the search results and shows which fields exist in the current results.
+
+| Element | Meaning |
+|---|---|
+| Selected Fields | Fields shown by default in results |
+| Interesting Fields | Auto-detected fields that may be useful (click → toggle "Selected" to add them) |
+| `#` | Numeric field |
+| `α` | Text (alpha-numeric) field |
+| Count | Number of events containing that field |
+
+> First search to try: `index=windowslogs` with time range set to **All time**. Both `index=windowslogs` and `index = windowslogs` are valid syntax.
 
 ---
 
-## 🔎 3. Basic Searches
+## 2. Basic Searches
+
+### Search an Index
+
+An index is essentially a Splunk data container — searching it retrieves all events stored inside.
 
 ```spl
-index=windowslogs               # everything in this index
-index=windowslogs alice         # free-text: "alice" ANYWHERE in logs
+index=windowslogs
 ```
-> ⚠️ Always start with `index=` to avoid slow full-data scans.
+
+### Free Text Search
+
+The simplest search type — Splunk looks for a keyword anywhere in the raw event, case-insensitive. Useful when you don't know field names yet or just want a quick hunt.
+
+```spl
+index=windowslogs alice
+```
+
+Returns all events containing the word "alice" anywhere in the log.
 
 ---
 
-## ⚔️ 4. Operators
+## 3. Search Operators
 
-### Relational
-| Op | Meaning | Example |
-|----|---------|---------|
-| `=` / `!=` | equal / not equal | `User!=SYSTEM` |
-| `>` `>=` | greater / or equal | `Count>=10` |
-| `<` `<=` | less / or equal | `Age<20` |
+Operators are the building blocks of every SPL query — they filter, compare, and combine conditions. Operators only work reliably once events are parsed into fields.
 
-### Logical
-| Op | Meaning | Example |
-|----|---------|---------|
-| `AND` | both match | `User=James AND EventID=4624` |
-| `OR` | either matches | `User=James OR User=John` |
-| `NOT` | term/field absent | `NOT User=*` |
-| `IN` | match a list | `User IN (James, John)` |
+### Relational Operators
+
+| Operator | Meaning | Example | What It Does |
+|---|---|---|---|
+| `=` | Equal to | `UserName=Mark` | Field `UserName` equals `Mark` |
+| `!=` | Not equal to | `UserName!=Mark` | Field `UserName` does not equal `Mark` |
+| `<` | Less than | `Age<10` | `Age` is less than 10 |
+| `<=` | Less than or equal | `Age<=10` | `Age` is 10 or below |
+| `>` | Greater than | `Outbound_Traffic>50` | `Outbound_Traffic` exceeds 50 |
+| `>=` | Greater than or equal | `Outbound_Traffic>=50` | `Outbound_Traffic` is 50 or more |
+
+```spl
+index=windowslogs AccountName!=SYSTEM
+```
+Filters out all events where `AccountName` is `SYSTEM`.
+
+### Logical Operators
+
+| Operator | Meaning | Example | Notes |
+|---|---|---|---|
+| `AND` | Both conditions true | `UserName=David AND IPAddress=10.10.10.10` | `AND` is implied between terms even if omitted |
+| `OR` | Either condition true | `UserName=David OR UserName=John` | — |
+| `NOT` | Field does not exist / exclude | `NOT UserName=*` | Different from `!=` — this checks field existence |
+| `IN` | Match against a list | `UserName IN(David, John)` | Cleaner alternative to chained `OR` |
+
+```spl
+index=windowslogs AccountName!=SYSTEM AND AccountName=James
+index=windowslogs AccountName!=SYSTEM AccountName=James   // same result, AND is implied
+```
 
 ### Wildcards & CIDR
-| Syntax | Purpose | Example |
-|--------|---------|---------|
-| `*` | partial text | `status=*fail*` |
-| `*` | partial IP | `DestinationIp=172.*` |
-| CIDR | whole subnet | `DestinationIp=172.18.0.0/16` |
+
+| Symbol | Example | What It Matches |
+|---|---|---|
+| `*` | `status=*fail*` | `failed`, `failure`, `appfail`, etc. |
+| `*` | `DestinationIp=172.*` | Any IP starting with `172.` |
+| CIDR notation | `DestinationIp=172.18.0.0/16` | Any IP inside that subnet |
+
+---
+
+## 4. Quotes, Parentheses & Order of Evaluation
+
+### Quotes — Exact Phrase Matching
+
+Quotes tell Splunk to treat the enclosed text as a single exact phrase (word order matters), and can also be used to escape reserved operator keywords.
+
+| Query | Behavior |
+|---|---|
+| `index=windowslogs failed login` | Matches events containing both words, in any order |
+| `index=windowslogs "failed login"` | Matches only the exact phrase, in that order |
+| `index=windowslogs "TO BE OR NOT TO BE"` | Quotes force `OR`/`NOT` to be treated as plain text, not operators |
+
+### Parentheses — Controlling Evaluation Order
+
+`OR` has higher precedence than `AND` in SPL, so ambiguous queries can evaluate differently than expected. Parentheses remove the ambiguity.
+
+| Query | How Splunk Reads It |
+|---|---|
+| `alice AND bob OR charlie` | `alice AND (bob OR charlie)` — likely **not** what you meant |
+| `(alice AND bob) OR charlie` | Explicit grouping — matches (`alice` and `bob` together) **or** `charlie` alone |
+
+---
+
+## 5. The Pipe Operator
+
+Commands are chained with the pipe symbol `|`. Each command's output becomes the input for the next command, letting you refine results step by step.
 
 ```spl
-"failed login"                  # exact phrase (order matters)
-(alice AND bob) OR charlie      # () controls evaluation order
+index=windowslogs
+| fields User SourceIp
 ```
 
 ---
 
-## 🎯 5. Filtering Commands (Trim the Noise)
+## 6. Filtering Commands
 
-| Command | Purpose |
-|---------|---------|
-| `fields` | include/exclude columns |
-| `dedup` | remove duplicate values |
-| `rename` | rename fields (readability / flatten JSON) |
-| `regex` | filter by pattern (PCRE) |
+| Command | Purpose | Example |
+|---|---|---|
+| `fields` | Include/exclude specific fields from output | `\| fields User SourceIp` |
+| `dedup` | Remove duplicate events based on a field | `\| dedup SourceIp` |
+| `rename` | Rename a field for readability | `\| rename User as Employee` |
+| `regex` | Filter using regular expressions (PCRE) | `\| regex Image="\.exe$"` |
+
+### `fields` in Detail
+
+Use `-` before a field name to exclude it; `+` explicitly includes one (default behavior, rarely needed).
+
+```spl
+index=windowslogs | fields host User SourceIp
+```
+
+### `dedup` in Detail
+
+Keeps only one event per unique value of the chosen field — helpful for cleaning up noisy sources (e.g., some platforms log the same activity many times).
 
 ```spl
 index=windowslogs
-| fields host User SourceIp     # keep only these 3
-| fields - _raw                 # '-' EXCLUDES the bulky _raw field
+| fields EventID User Image Hostname SourceIp
+| dedup SourceIp
+```
 
+### `rename` in Detail
+
+Improves readability in reports and dashboards, and can flatten nested JSON/XML fields.
+
+```spl
 index=windowslogs
-| dedup SourceIp                # 7 unique IPs -> 7 events (cleans repeat logs, e.g. M365)
+| fields EventID User Image Hostname SourceIp
+| rename User as Employee
+```
 
+Flattening a nested field, e.g. turning `request.path` into `path`:
+
+```spl
 index=jsondata
-| rename request.* as *         # flatten JSON: request.path -> path
-
-index=windowslogs
-| regex Image="\.exe$"          # \. = literal dot, $ = end of string -> only .exe
+| rename request.* as *
 ```
+
+### `regex` in Detail
+
+Matches field values against a pattern rather than an exact keyword — useful for structured formats (file extensions, ID formats, custom log parsing).
+
+```spl
+index=windowslogs | regex Image="\.exe$"
+```
+Returns only events where `Image` ends in `.exe` (`$` anchors the match to the end of the string).
 
 ---
 
-## 📑 6. Structuring Commands (Organize Output)
+## 7. Structuring Commands
 
-| Command | Purpose |
-|---------|---------|
-| `table` | clean column view (great for timelines) |
-| `head N` | first (newest) N events |
-| `tail N` | last (oldest) N events |
-| `sort` | sort (use `sort -field` for descending) |
-| `reverse` | flip event order |
+| Command | Purpose | Example |
+|---|---|---|
+| `table` | Display chosen fields in a clean tabular format | `\| table _time EventID Hostname SourceName` |
+| `head` | Return the first (newest) N events | `\| head 20` |
+| `tail` | Return the last (oldest) N events | `\| tail 20` |
+| `sort` | Sort results by a field (ascending) | `\| sort User` |
+| `reverse` | Reverse the current event order | `\| reverse` |
+
+`head`/`tail` are also handy for speeding up a search when you don't need the full result set.
+
+### Building a Timeline with `table`
+
+Combining `table` with a host filter and `reverse` reconstructs a chronological sequence of activity on a machine.
 
 ```spl
 index=windowslogs Hostname=Salena.Adam
-| table _time Hostname EventID Category   # pick timeline columns
-| reverse                                 # oldest -> newest = story order
+| table _time Hostname EventID Category
+| reverse
 ```
 
 ---
 
-## 🔗 7. Subsearch + `join` (Correlate 2 Sources)
-**Why:** Sysmon (`EventID=1`) logs process creation but NOT `LogonType`. Security (`EventID=4624`) has it. Shared key = `LogonId`.
+## 8. Subsearches
+
+A subsearch lets you correlate data across two different sources within a single query, using a shared field as the join key.
+
+**Example scenario:** Sysmon process-creation events (`EventID=1`) don't include the logon type, but Windows Security logon events (`EventID=4624`) do. Both share a `LogonId` field, which can be used to join them.
 
 ```spl
-index=windowslogs EventID=1                       # MAIN: process creation events
-| join LogonId                                    # link on LogonId
-    [ search index=windowslogs EventID=4624       # SUBSEARCH runs FIRST
-    | rename TargetLogonId as LogonId             # match Sysmon field name
-    | fields LogonId LogonType IpAddress ]        # bring back these fields
-| table _time Image User LogonType IpAddress      # unified result
+index=windowslogs EventID=1
+| join LogonId
+    [ search index=windowslogs EventID=4624
+    | rename TargetLogonId as LogonId
+    | fields LogonId LogonType IpAddress ]
+| table _time Image User LogonType IpAddress
 ```
-> ⚠️ `join` is **slow on big data** — prefer `stats`/`eval` when possible. Use join to enrich source A with fields from source B.
+
+**How it works:**
+
+1. The subsearch (in `[ ]`) runs first — it searches `EventID=4624` events, renames `TargetLogonId` to `LogonId` so field names match, and keeps only `LogonId`, `LogonType`, `IpAddress`.
+2. Splunk stores those results as a temporary lookup table.
+3. The main search runs over `EventID=1` events, and for each one, checks if its `LogonId` matches an entry from the subsearch.
+4. Matching `LogonType` and `IpAddress` values are added to the corresponding event.
+
+> **Performance note:** subsearches don't scale well on large datasets. Many use cases can be replaced with `stats` + `eval` (see below), which is more efficient. Reach for subsearch + `join` mainly when you need to enrich data source A with fields from data source B.
 
 ---
 
-## 📊 8. Transforming Commands (Summarize & Visualize)
+## 9. Transforming Commands
 
-| Command | Purpose |
-|---------|---------|
-| `top` / `rare` | most / least frequent values |
-| `highlight` | mark keywords (switch view to Raw) |
-| `stats` | aggregate math |
-| `chart` | table ready for visualization |
-| `timechart` | trends over time |
+Transforming commands turn raw events into aggregated summaries, statistics, and visualizations — instead of reading events one by one, you can spot patterns across thousands at once.
+
+| Command | Purpose | Example |
+|---|---|---|
+| `top` | Most frequent values of a field | `\| top User limit=5` |
+| `rare` | Least frequent values of a field | `\| rare User limit=5` |
+| `highlight` | Visually highlight terms in raw event view | `\| highlight User EventID` |
+| `stats` | Calculate statistics (count, sum, avg, etc.) | `\| stats count by EventID` |
+| `chart` | Return results as a chart-ready table | `\| chart count by User` |
+| `timechart` | Visualize values over time | `\| timechart span=30m count by Image` |
+
+`limit=` on `top`/`rare` controls how many results are returned (default is 10).
+
+### `highlight` in Detail
 
 ```spl
-index=windowslogs | top User limit=5      # 5 MOST frequent users
-index=windowslogs | rare User limit=5     # 5 LEAST frequent (often suspicious!)
-
-index=windowslogs
-| stats count by EventID                  # count events per EventID
-| sort EventID
-
-index=windowslogs | chart count by User   # visualize count per user
-
-index=windowslogs Image!=""               # drop empty Image
-| timechart span=30m count by Image limit=5   # 30-min buckets, top 5 processes
+index=windowslogs | highlight User EventID Image "Process accessed"
 ```
+Note: switch the results view from **List** to **Raw** to see the highlighting.
 
-**`stats` functions:** `count` · `avg()` · `sum()` · `max()` · `min()`
+### `stats` Functions
 
-| Command | X-axis | Best for |
-|---------|--------|----------|
-| `stats` | none (table) | raw numbers |
-| `chart` | any field | comparing categories |
-| `timechart` | always `_time` | time-based spikes |
+| Function | Example | Description |
+|---|---|---|
+| `count` | `stats count by SourceIp` | Counts occurrences per value |
+| `avg` | `stats avg(ProcessCount)` | Average of a numeric field |
+| `sum` | `stats sum(Cost)` | Total of a numeric field |
+| `max` | `stats max(Price)` | Maximum value |
+| `min` | `stats min(UserAge)` | Minimum value |
+
+```spl
+index=windowslogs | stats count by EventID | sort EventID
+```
+Counts events per `EventID` and sorts the results ascending.
+
+### `chart`
+
+```spl
+index=windowslogs | chart count by User
+```
+Same underlying logic as `stats`, formatted for direct use in Splunk's charting/visualization panel.
+
+### `timechart`
+
+```spl
+index=windowslogs Image!="" | timechart span=30m count by Image limit=5
+```
+Excludes empty `Image` values, buckets events into 30-minute intervals, and charts the top 5 most common images — useful for spotting trends, spikes, or gaps over time.
 
 ---
 
-## 🌍 9. Data Enrichment
+## 10. Data Enrichment
 
-| Command | Purpose |
-|---------|---------|
-| `iplocation` | add City/Region/Country from IP |
-| `lookup` | enrich using a CSV/table |
-| `eval` | create/modify fields, calculations |
+| Command | Purpose | Example |
+|---|---|---|
+| `iplocation` | Adds geolocation fields (City, Region, Country) from an IP | `\| iplocation SourceIp` |
+| `lookup` | Enriches events using an external CSV/lookup table | `\| lookup user_roles Hostname OUTPUT UserRole` |
+| `eval` | Creates or modifies fields, including calculated ones | `\| eval LogonTypeDesc="Network Logon"` |
+
+### `iplocation`
+
+```spl
+index=windowslogs | iplocation SourceIp | stats count by Country
+```
+Uses Splunk's built-in geolocation database — no external file needed.
+
+### `lookup`
 
 ```spl
 index=windowslogs
-| iplocation SourceIp                     # add geo fields
-| stats count by Country                  # logins per country
-
-index=windowslogs
-| lookup user_roles Hostname OUTPUT UserRole   # map Hostname -> role from CSV
+| lookup user_roles Hostname OUTPUT UserRole
 | stats count by Hostname UserRole
+```
+Matches `Hostname` against a pre-loaded CSV (`user_roles`) to pull in a `UserRole` field.
 
+### `eval`
+
+One of the most versatile SPL commands — supports conditional logic, string manipulation, math, and more.
+
+```spl
 index=windowslogs
-| eval LogonTypeDesc = case(LogonType==3,"Network Logon",
-                            LogonType==5,"Service")   # code -> readable label
+| eval LogonTypeDesc=case(LogonType==3, "Network Logon", LogonType==5, "Service")
 | stats count by LogonType LogonTypeDesc
 ```
+Assigns a human-readable label based on the numeric `LogonType` value.
 
 ---
 
-## 🚨 10. Anomaly Detection
-- **`eventstats`** = like `stats` but **keeps raw events** (adds a stat column to each row).
-- **`where`** = like `search` but supports **expressions & field-to-field compares**.
+## 11. Anomaly Detection
 
-### A. Outliers by Country (rare login location)
+Goal: spot the events that look statistically different from the norm, even when nothing obvious stands out at first glance (e.g., in a dataset of thousands of VPN logins).
+
+Key commands:
+
+| Command | Purpose |
+|---|---|
+| `eventstats` | Like `stats`, but keeps the original individual events instead of collapsing them |
+| `where` | Filters using logical/mathematical expressions (more powerful than plain `search`) |
+| `eval` | Builds the calculated fields used in the analysis |
+
+### Detecting Outliers by Country
+
+**Scenario:** most users log in from their home country. A login from an unusual country for that specific user is worth investigating, even if it looks unremarkable in aggregate.
+
 ```spl
 index=vpnlogs
-| eventstats count as logins_by_user by user               # total logins per user
-| eventstats count as logins_by_user_country by user src_country  # logins per user+country
-| eval country_freq = logins_by_user_country / logins_by_user     # how rare is this country?
-| where country_freq < 0.1                                 # threshold = keep rare ones
+| eventstats count as logins_by_user by user
+| eventstats count as logins_by_user_country by user src_country
+| eval country_freq=logins_by_user_country/logins_by_user
+| where country_freq < 0.1
 | table _time user src_ip src_country country_freq
 ```
-> Result: kbrown logged in from Austria **once** (freq 0.005) out of 200 → possible VPN/breach.
 
-### B. Outliers by Login Hour (Z-Score)
-$$
-zscore = \frac{|observed - average|}{standard\ deviation}
-$$
+| Step | What It Calculates |
+|---|---|
+| `logins_by_user` | Total logins for that user, across all countries |
+| `logins_by_user_country` | Logins for that user from one specific country |
+| `country_freq` | Ratio of country-specific logins to total logins |
+| `where country_freq < 0.1` | Keeps only rare user–country combinations (threshold = 0.1, i.e. under 10%) |
 
-> Higher Z-score = more anomalous. `zscore > 3` = way outside that user's normal window.
+A low `country_freq` (e.g., `0.005`, meaning that country accounts for only 0.5% of that user's logins) is a strong signal of either travel, VPN usage, or account compromise.
+
+### Detecting Outliers by Hour
+
+**Scenario:** some employees always log in during business hours; others have irregular schedules. A single "typical hour" threshold across all users doesn't work — instead, calculate what's normal *per user*, then measure how far a given login deviates from their own pattern.
 
 ```spl
 index=vpnlogs
-| eval hour=tonumber(strftime(_time,"%H")) + tonumber(strftime(_time,"%M"))/60  # decimal hour
-| eventstats avg(hour) as typical_hour stdev(hour) as stdev_hour by user        # per-user baseline
-| eval zscore = abs(hour - typical_hour) / stdev_hour                           # how weird?
-| where zscore > 3                                                              # keep outliers
-| eval hour=round(hour,2), typical_hour=round(typical_hour,2)                   # tidy numbers
-| eval stdev_hour=round(stdev_hour,2), zscore=round(zscore,2)
+| eval hour=tonumber(strftime(_time, "%H")) + tonumber(strftime(_time, "%M"))/60
+| eventstats avg(hour) as typical_hour stdev(hour) as stdev_hour by user
+| eval zscore=abs(hour - typical_hour) / stdev_hour
+| where zscore > 3
+| eval hour=round(hour, 2), typical_hour=round(typical_hour, 2)
+| eval stdev_hour=round(stdev_hour, 2), zscore=round(zscore, 2)
 | table _time user src_ip src_country hour typical_hour stdev_hour zscore
-| sort - zscore
 ```
-> Result: jsmith normally logs in ~13:30 but was seen at 18:30 → investigate.
 
-### C. ML & Impossible Travel
-Built on the SAME basics: **SPL + math + threat context** (`iplocation` geo / `lookup` intel). Splunk's `fit`/`apply` add machine learning for future outliers.
+| Field | Meaning |
+|---|---|
+| `hour` | Login time converted to a decimal hour (e.g., 13:30 → `13.5`) |
+| `typical_hour` | That user's average login hour |
+| `stdev_hour` | How spread out / predictable that user's login times are (lower = more consistent) |
+| `zscore` | How many standard deviations the current login is from that user's typical hour |
 
----
+#### Z-Score Formula
 
-## 📌 Quick Reference
+```
+zscore = |observed - average| / standard_deviation
+```
 
-| Category | Commands |
-|----------|----------|
-| Filtering | `search` `fields` `dedup` `rename` `regex` |
-| Structuring | `table` `head` `tail` `sort` `reverse` |
-| Correlation | `join` (subsearch) |
-| Transforming | `top` `rare` `highlight` `stats` `chart` `timechart` |
-| Enrichment | `iplocation` `lookup` `eval` |
-| Anomaly | `eventstats` `where` |
+A higher z-score means a more anomalous event. `zscore > 3` is a common threshold for flagging outliers.
 
----
+### Beyond the Basics: ML & Impossible Travel
 
-## 🧠 Key Takeaways
-- ✅ SPL = Splunk's language for searching/analyzing logs.
-- 🔗 Pipe `|` chains commands like a data pipeline.
-- 📋 `fields` + `table` = trim noise, clean output.
-- 📊 `stats` `chart` `timechart` = summarize & visualize.
-- 🛠️ `eval` + `case()` = map cryptic codes to readable labels.
-- 🌍 `lookup` + `iplocation` = enrich with roles & geo.
-- 🚨 `eventstats` + `where` = anomaly-detection backbone.
-- 📈 Z-score = quantifies "how weird" an event is (foundation for ML).
+More advanced detections — such as **Impossible Travel** (a user logging in from two geographically distant locations in a timeframe that would require faster-than-possible travel) — build on the same core commands (`eventstats`, `eval`, `where`), combined with:
+
+- IP geolocation (`iplocation`)
+- Threat intelligence lookups (`lookup`)
+- Splunk's `fit` and `apply` commands, which apply machine learning models to detect outliers automatically
 
 ---
 
-## 📅 Progress
-- Room Completed: ✅
-- Difficulty: Intermediate
-- Time Taken: 1 hour
+## Full Command Reference
 
+| Command | Purpose |
+|---|---|
+| `search` | Base search / filter events |
+| `fields` | Include or exclude fields |
+| `table` | Display selected fields as a table |
+| `dedup` | Remove duplicate events |
+| `rename` | Rename a field |
+| `regex` | Filter using regular expressions |
+| `sort` | Sort results |
+| `reverse` | Reverse event order |
+| `head` | Return first N (newest) events |
+| `tail` | Return last N (oldest) events |
+| `join` | Correlate results from a subsearch |
+| `top` | Most common field values |
+| `rare` | Least common field values |
+| `highlight` | Highlight terms in raw view |
+| `stats` | Summarize/aggregate data |
+| `chart` | Build a chart-ready table |
+| `timechart` | Visualize data over time |
+| `iplocation` | Add IP geolocation fields |
+| `lookup` | Enrich data from an external table |
+| `eval` | Create or modify fields |
+| `eventstats` | Aggregate stats while keeping raw events |
+| `where` | Advanced conditional filtering |
+
+---
+
+## Personal Reflection
+
+This room gave me a much better understanding of how analysts use Splunk SPL to investigate logs efficiently. Instead of scrolling through thousands of raw events, SPL allows me to filter, organize, summarize, and visualize data to quickly identify suspicious activity. Learning commands such as `stats`, `eval`, `timechart`, and `eventstats` showed how powerful SPL is for real-world SOC investigations. As someone preparing for a SOC Analyst internship, this room strengthened my confidence in writing basic SPL queries and understanding how security analysts investigate incidents.
+
+---
+
+## Progress
+
+| Item | Status |
+|---|---|
+| Room Completed | Yes |
+| Difficulty | Intermediate |
+| Time Taken | 1 hour |
