@@ -1,4 +1,5 @@
-# Python Essentials 2 – Module 2: Strings & Exceptions
+# Python Essentials 2 
+### Module 2: Strings, Strings & List Method and Exceptions
 
 ---
 
