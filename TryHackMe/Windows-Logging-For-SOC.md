@@ -1,4 +1,4 @@
-# 📖 Windows Logging for SOC Analysts (TryHackMe)
+# 📖 Windows Logging for SOC Analysts
 
 ## 🎯 Objective
 
