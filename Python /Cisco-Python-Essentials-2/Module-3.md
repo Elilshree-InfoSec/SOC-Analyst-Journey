@@ -3,7 +3,7 @@
 
 ---
 
-## 1. Core Concepts (Vocabulary Table)
+## 1. Core Concepts
 
 | Term | Meaning |
 |---|---|
