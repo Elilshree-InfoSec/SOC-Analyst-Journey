@@ -524,7 +524,3 @@ If you only learn six commands first, learn these — they cover the large major
 | `where` | Filter using eval-style boolean expressions (vs. `search`'s keyword syntax) |
 
 `table` (select output columns) and `sort` (order results) round out the essential toolkit.
-
----
-
-*Compiled as an internal reference. Field names, data model mappings, and macro availability will vary by environment — validate against your own CIM mappings and TAs before deploying any query to production or a correlation search.*
