@@ -448,5 +448,5 @@ This room gave me a much better understanding of how analysts use Splunk SPL to 
 
 ## 📅 Progress
 - Room Completed: ✅
-- Difficulty: Easy
-- Time Taken: ~30 minutes
+- Difficulty: Medium
+- Time Taken: 1 hour
