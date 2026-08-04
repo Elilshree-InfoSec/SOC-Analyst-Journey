@@ -2,24 +2,6 @@
 
 Study notes on Splunk's Search Processing Language (SPL) — how to search, filter, transform, and analyze log data for SOC investigations.
 
-## Table of Contents
-
-- [Learning Objectives](#learning-objectives)
-- [1. Search & Reporting App](#1-search--reporting-app)
-- [2. Basic Searches](#2-basic-searches)
-- [3. Search Operators](#3-search-operators)
-- [4. Quotes, Parentheses & Order of Evaluation](#4-quotes-parentheses--order-of-evaluation)
-- [5. The Pipe Operator](#5-the-pipe-operator)
-- [6. Filtering Commands](#6-filtering-commands)
-- [7. Structuring Commands](#7-structuring-commands)
-- [8. Subsearches](#8-subsearches)
-- [9. Transforming Commands](#9-transforming-commands)
-- [10. Data Enrichment](#10-data-enrichment)
-- [11. Anomaly Detection](#11-anomaly-detection)
-- [Full Command Reference](#full-command-reference)
-- [Personal Reflection](#personal-reflection)
-- [Progress](#progress)
-
 ---
 
 ## Learning Objectives
@@ -464,10 +446,7 @@ This room gave me a much better understanding of how analysts use Splunk SPL to 
 
 ---
 
-## Progress
-
-| Item | Status |
-|---|---|
-| Room Completed | Yes |
-| Difficulty | Intermediate |
-| Time Taken | 1 hour |
+## 📅 Progress
+- Room Completed: ✅
+- Difficulty: Easy
+- Time Taken: ~30 minutes
