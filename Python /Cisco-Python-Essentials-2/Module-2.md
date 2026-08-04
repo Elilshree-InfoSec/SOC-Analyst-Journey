@@ -168,13 +168,62 @@ Plain `sorted()` would put "Critical" before "Low" alphabetically — wrong for 
 
 ## 5. Worked String Programs (concepts to remember)
 
-- **Caesar Cipher**: shift each letter's code point by N, wrap around past `Z`/`z` using modulo-like correction. Core pattern: `ord()` → shift → bounds-check → `chr()`.
-- **IBAN validator**: move first 4 chars to the end, convert letters→digits (`A=10...Z=35`), treat result as one big integer, valid if `% 97 == 1`. Shows string manipulation + big-integer math combined.
-- Common pattern across all four programs: **loop through characters, classify each one (`isalpha`/`isdigit`), build a new string/number incrementally** — since strings can't be modified in place.
-
-### 🔐 SOC relevance
-The Caesar cipher pattern (shift/substitute characters) is the same logic behind simple obfuscation techniques (ROT13, XOR string obfuscation) that malware sometimes uses to hide strings/IOCs — recognizing "shift by N" logic helps when reverse-engineering a decoder script.
-
+## 5. Worked String Programs
+ 
+### Caesar Cipher (encrypt)
+```python
+text = input("Enter message: ").upper()
+cipher = ""
+ 
+for ch in text:
+    if not ch.isalpha():
+        continue                      # skip spaces/punctuation
+    code = ord(ch) + 1                # shift by 1
+    if code > ord('Z'):
+        code = ord('A')               # wrap Z -> A
+    cipher += chr(code)
+ 
+print(cipher)   # AVE CAESAR -> BWFDBFTBS
+```
+Pattern: `ord()` → shift → wrap if out of bounds → `chr()` → append (since strings are immutable, you build a new one char by char).
+ 
+### IBAN Validator (core check)
+```python
+iban = "GB72HBZU70067212125300"
+iban = iban[4:] + iban[:4]            # move first 4 chars to the end
+ 
+digits = ""
+for ch in iban:
+    if ch.isdigit():
+        digits += ch
+    else:
+        digits += str(ord(ch) - ord('A') + 10)   # A=10 ... Z=35
+ 
+print(int(digits) % 97 == 1)          # True = looks valid
+```
+Same loop-and-build pattern as Caesar cipher, just classifying `isdigit()` instead of `isalpha()`.
+ 
+### 🔐 SOC example — simple deobfuscation
+Attackers sometimes hide strings (IOCs, C2 domains) with a basic Caesar/ROT shift. Reversing it is just the cipher above run backwards:
+```python
+obfuscated = "wklv0lv0edg0grpdlq1frp"   # shifted by 3, dots replaced with 0
+ 
+decoded = ""
+for ch in obfuscated:
+    if ch.isalpha():
+        code = ord(ch) - 3
+        if code < ord('a'):
+            code = ord('z') - (ord('a') - code - 1)
+        decoded += chr(code)
+    elif ch == "0":
+        decoded += "."
+    else:
+        decoded += ch
+ 
+print(decoded)   # this.is.bad.domain.com
+```
+Recognizing "shift every letter by N" is often enough to spot-decode simple malware string obfuscation without needing a full reverse-engineering toolchain.
+ 
 ---
 
 ## 6. Errors & Exceptions
