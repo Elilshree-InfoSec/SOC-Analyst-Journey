@@ -93,35 +93,35 @@ index=windows EventCode=4625
 
 ## 🕵️ Common Starter Searches
 
-** Top failed logins:**
+**Top failed logins:**
 ```spl
 index=windows EventCode=4625
 | stats count by user
 | sort -count
 ```
 
-** Failed SSH attempts by IP:**
+**Failed SSH attempts by IP:**
 ```spl
 sourcetype=linux_secure "Failed password for"
 | stats count by src_ip
 | sort -count
 ```
 
-** Brute force (5+ fails from one IP):**
+**Brute force (5+ fails from one IP):**
 ```spl
 sourcetype=linux_secure "Failed password"
 | stats count by src_ip
 | where count >= 5
 ```
 
-** Enrich IP with location:**
+**Enrich IP with location:**
 ```spl
 index=windows
 | iplocation src_ip
 | stats count by Country
 ```
 
-** Enrich with a lookup table (like threat intel):**
+**Enrich with a lookup table (like threat intel):**
 ```spl
 | lookup threat_intel_ips ip as src_ip OUTPUT threat_category
 | where isnotnull(threat_category)
