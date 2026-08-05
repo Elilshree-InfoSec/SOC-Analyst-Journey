@@ -100,3 +100,4 @@
 4. Detect **Kerberoasting** from 4769 volume + encryption type.
 5. Spot **unauthorized privileged group** membership changes.
 6. Correlate **Logon ID** across events to build one coherent session story.
+
