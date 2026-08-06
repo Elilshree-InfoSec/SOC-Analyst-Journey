@@ -154,5 +154,3 @@
 | `apt-get update && apt-get upgrade` | Update system | Patch vulnerabilities |
 | `chattr +i` | Make file immutable | Preserve forensic evidence |
 
-
-THIS IS THE THING U GENERATED EARLIER WHO ARE U LYING TO ADDING EXAMPLE COLUMN ONLY WHAT
