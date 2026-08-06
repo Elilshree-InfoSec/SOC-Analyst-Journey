@@ -118,3 +118,15 @@ mkdir logs && cd logs
 * `find` helps locate files quickly.
 * Redirection (`>` and `>>`) is useful for saving investigation results.
 * These basic commands are used daily by SOC Analysts, System Administrators, and Penetration Testers.
+
+---
+
+#💭 Personal Reflection
+
+This room helped me understand the basics of Linux and why it is essential in cybersecurity. I gained confidence using the terminal and learned core commands that will support my future SOC analyst tasks, such as navigating the system and searching through logs.
+
+---
+
+Room Completed: ✅
+Difficulty: Easy
+Time Taken: 15 minutes
