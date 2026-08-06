@@ -425,9 +425,7 @@ This room strengthened my understanding of the Windows logs that SOC analysts wo
 
 # 📅 Progress
 
-| Status         | Value                                                                                                                           |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Room Completed | ✅                                                                                                                             |
-| Difficulty     | Easy                                                                                                                            |
-| Estimated Time | 1 hour                                                                                                                          |
+- Room Completed: ✅
+- Difficulty: Medium
+- Time Taken: 1 hour                                                                                                                       
 
