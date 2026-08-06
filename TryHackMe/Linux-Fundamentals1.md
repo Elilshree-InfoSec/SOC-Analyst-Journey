@@ -127,6 +127,6 @@ This room helped me understand the basics of Linux and why it is essential in cy
 
 ---
 
-Room Completed: ✅
-Difficulty: Easy
-Time Taken: 15 minutes
+- Room Completed: ✅
+- Difficulty: Easy
+- Time Taken: 15 minutes
