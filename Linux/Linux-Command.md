@@ -1,4 +1,4 @@
-# 🐧 Linux Command Cheatsheet (SOC Analyst Notes)
+# 🐧 Linux Command Cheatsheet (SOC Analyst Tier 1 Notes)
 
 # 📂 File & Directory Management
 
@@ -56,10 +56,9 @@
 | `top` / `htop` | Monitor processes | Detect malware or crypto miners |
 | `ps aux \| grep` | Find processes | Search suspicious processes |
 | `pstree` / `ps auxf` | Process tree | Detect spawned shells (RCE) |
-| `kill -9` | Force kill process | Stop malicious process |
+| `kill <PID>` | Send termination signal to a process | Stop a runaway/benign process during troubleshooting — for confirmed malicious processes, document and escalate to Tier 2/IR rather than killing it yourself |
 | `kill -STOP` | Freeze process | Preserve malware for forensics |
-| `pkill` / `killall` | Kill multiple processes | Stop all malware instances |
-| `fuser -k` | Kill process using a port | Remove rogue listener |
+| `pkill` | Signal processes by name | Search suspicious process names (use with caution — killing is a Tier 2/IR call) |
 
 ---
 
@@ -123,7 +122,6 @@
 |----------|----------|--------------|
 | `lsblk` | Show disks | Detect unauthorized USB drives |
 | `crontab -l` | View cron jobs | Find persistence |
-| `crontab -r` | Remove cron jobs | Remove attacker persistence |
 
 ---
 
@@ -135,16 +133,6 @@
 
 ---
 
-# 🛡️ Firewall & Containment
-
-| Command | Purpose | SOC Use Case |
-|----------|----------|--------------|
-| `iptables -A INPUT -s <IP> -j DROP` | Block IP | Immediate containment |
-| `ufw deny from <IP>` | Block IP (UFW) | Quick firewall rule |
-| `ip route add blackhole <IP>` | Blackhole traffic | Silent containment |
-
----
-
 # 📌 Useful Miscellaneous
 
 | Command | Purpose | SOC Use Case |
@@ -152,5 +140,4 @@
 | `find` | Search filesystem | Find recently modified files |
 | `echo` | Output text | Quick configuration edits |
 | `apt-get update && apt-get upgrade` | Update system | Patch vulnerabilities |
-| `chattr +i` | Make file immutable | Preserve forensic evidence |
 
