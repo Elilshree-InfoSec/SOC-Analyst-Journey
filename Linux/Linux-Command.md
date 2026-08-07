@@ -54,7 +54,7 @@
 | Command | Purpose | SOC Use Case |
 |----------|----------|--------------|
 | `top` / `htop` | Monitor processes | Detect malware or crypto miners |
-| `ps aux \| grep` | Find processes | Search suspicious processes |
+| `ps aux \| grep <process_name>` | Find processes | Search for a specific suspicious process, e.g. `ps aux \| grep ssh`, `ps aux \| grep nginx`, `ps aux \| grep python` |
 | `pstree` / `ps auxf` | Process tree | Detect spawned shells (RCE) |
 | `kill <PID>` | Send termination signal to a process | Stop a runaway/benign process during troubleshooting — for confirmed malicious processes, document and escalate to Tier 2/IR rather than killing it yourself |
 | `kill -STOP` | Freeze process | Preserve malware for forensics |
