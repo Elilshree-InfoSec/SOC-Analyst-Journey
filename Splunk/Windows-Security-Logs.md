@@ -23,6 +23,19 @@
 | 4768 | Kerberos TGT Request | Odd hours, RC4 encryption = downgrade |
 | 4769 | Kerberos Service Ticket Request | Burst across many SPNs = Kerberoasting |
 | 4771 | Kerberos Pre-Auth Failed | Brute force against AD accounts |
+| 1102 | Audit Log Cleared | Windows Security Log was cleared — very high severity, often an attacker removing evidence |
+
+---
+
+## 🔍 4688 — Fields to Always Check
+
+Whenever you investigate a 4688 (Process Creation) event, these are the first fields to inspect:
+
+- **Parent Process** — what launched this process? Is that normal for this parent?
+- **Child Process** — what actually ran?
+- **Command Line** — full arguments/flags used (this is where encoded PowerShell, LOLBin abuse, etc. shows up)
+- **User** — which account launched it, and does that fit their role?
+- **Integrity Level** — was it run at Medium, High, or System integrity? Elevated integrity on an unexpected process is a red flag
 
 ---
 
@@ -77,6 +90,7 @@
 - 4769 — burst of requests for many different SPNs from one account in a short window → **Kerberoasting**
 - 4768/4769 using RC4 (`0x17`) instead of AES (`0x12`) → encryption downgrade attempt
 - 4698 (scheduled task) created by an unexpected account or running as SYSTEM
+- 1102 appearing at all, especially right before/after other suspicious activity → attacker attempting to cover their tracks
 
 ---
 
@@ -89,15 +103,6 @@
 - Was anyone added to a privileged group?
 - What process was spawned, and by what parent?
 - Is there Kerberos activity suggesting ticket abuse?
+- Was the audit log cleared, and if so, what happened right before it?
 
----
-
-## ✅ Core Skills to Practice
-
-1. Build a full **logon timeline** for a user using 4624/4625/4634.
-2. Distinguish **brute force vs. password spray** from 4625 patterns.
-3. Trace a **4688 process tree** to find the origin of a suspicious process.
-4. Detect **Kerberoasting** from 4769 volume + encryption type.
-5. Spot **unauthorized privileged group** membership changes.
-6. Correlate **Logon ID** across events to build one coherent session story.
 
