@@ -317,18 +317,3 @@ When you open a packet capture, this is roughly what you're looking at for a typ
 
 **SOC Relevance:** These fields are exactly what you'll filter on in Wireshark or a SIEM query (e.g., `ip.addr == x.x.x.x && tcp.port == 445`) when investigating an alert or hunting for anomalous traffic.
 
----
-
-## Quick Study Priorities for Tier 1 Interviews/Job
-
-If you only have limited time, prioritize being able to **explain out loud, from memory**:
-1. The 7 OSI layers and one example protocol/attack per layer
-2. TCP vs UDP (reliable vs connectionless) — very commonly asked
-3. The TCP 3-way handshake (SYN, SYN-ACK, ACK) and what a SYN flood looks like
-4. The DNS resolution process and at least 2 DNS-based attacks
-5. Public vs private IP ranges from memory
-6. The port table above — cold
-7. How NAT/PAT affects log investigation (mapping public IP+port → internal host)
-8. The difference between IDS and IPS
-
-Good luck with the role — this is genuinely the right foundation to build on before diving deeper into SIEM tools, log analysis, and specific attack playbooks.
