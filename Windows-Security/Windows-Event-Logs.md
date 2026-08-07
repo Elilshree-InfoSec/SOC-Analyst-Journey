@@ -1,4 +1,4 @@
-# 🔐 Windows Security Logs 
+# 🔐 Windows Event Logs 
 
 ---
 
