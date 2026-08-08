@@ -47,8 +47,6 @@ elilshree-VirtualBox
 **SOC relevance:**
 Helps identify which endpoint/server the investigation is being performed on.
 
----
-
 ### Command: `whoami`
 
 **Purpose:**
@@ -61,8 +59,6 @@ elilshree
 
 **SOC relevance:**
 Confirms the identity/context of the session performing the investigation — important for chain-of-custody and knowing whether you're operating as a standard user or something more privileged.
-
----
 
 ### Command: `id`
 
@@ -77,8 +73,6 @@ uid=1000(elilshree) gid=1000(elilshree) groups=1000(elilshree),4(adm),24(cdrom),
 **SOC relevance:**
 Membership in the `sudo` group means this account can escalate to root. Any investigation involving this account needs to account for that elevated privilege — both for what the account *could* do, and as a target for attackers looking to abuse existing sudo access rather than exploit a separate privilege escalation bug.
 
----
-
 ### Command: `hostnamectl`
 
 **Purpose:**
@@ -89,8 +83,6 @@ System information — OS, hostname, kernel, architecture, etc.
 
 **SOC relevance:**
 Gives a consolidated system fingerprint (OS version, kernel, virtualization platform) used to check for outdated/vulnerable software and to confirm this is a VM (VirtualBox), which affects how network and persistence findings should be interpreted.
-
----
 
 ### Command: `uname -a`
 
@@ -105,8 +97,6 @@ Linux elilshree-VirtualBox 7.0.0-28-generic #28-24.04.1-Ubuntu SMP PREEMPT_DYNAM
 **SOC relevance:**
 Exact kernel version is used to cross-reference known kernel CVEs (e.g. privilege escalation exploits) relevant to this build of Ubuntu 24.04.1.
 
----
-
 ### Command: `uptime`
 
 **Purpose:**
@@ -119,8 +109,6 @@ Shows how long the system has been running and system load. Useful when establis
 
 **SOC relevance:**
 A system freshly rebooted (9 minutes uptime here) is itself an investigative clue — could indicate a patch/update, a crash, or an attacker attempting to clear in-memory evidence. Load averages also help spot abnormal resource usage tied to malicious processes.
-
----
 
 ### Command: `date`
 
