@@ -34,8 +34,6 @@
 
 Before investigating anything, establish your baseline.
 
----
-
 ### Command: `hostname`
 
 **Purpose:**
