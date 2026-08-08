@@ -261,6 +261,3 @@ A host/user with a clean 90-day Kerberos-only history suddenly using NTLM, with 
 
 </details>
 
----
-
-*Practice scenarios for personal SOC study — pair with your Active Directory notes file* 📘
