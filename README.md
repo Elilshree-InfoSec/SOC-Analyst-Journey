@@ -125,4 +125,4 @@ This repository is a record of that process.
 **Computer Systems & Network | Universiti Malaya**  
 **Aspiring Cybersecurity / SOC Analyst**
 
-[LinkedIn](www.linkedin.com/in/elilshree-prabhakaran-282488300) • [GitHub](https://github.com/Elilshree23)
+[LinkedIn](https://www.linkedin.com/in/elilshree-prabhakaran-282488300/) • [GitHub](https://github.com/Elilshree23)
