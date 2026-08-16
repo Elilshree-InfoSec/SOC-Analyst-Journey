@@ -24,24 +24,24 @@
 
 # 1. Executive Summary
 
-An investigation was initiated after Windows Security logs showed repeated failed authentication attempts together with process creation and network share activity.
+An investigation was initiated after Windows Security logs showed repeated failed authentication attempts, process creation activity, and network share events.
 
 ### Key Findings
 
-| Indicator                   | Finding            |
-| --------------------------- | ------------------ |
-| Failed Logons               | 20                 |
-| Target Account              | `reed.fernandez`   |
-| Successful Login for Target | None observed      |
-| Process Creation            | 71 events          |
-| Network Share Events        | 3                  |
-| Suspicious Processes        | None identified    |
-| Splunk Processes            | Observed           |
-| Confirmed Lateral Movement  | No                 |
-| Confirmed Compromise        | No                 |
+| Indicator                   |            Finding |
+| --------------------------- | -----------------: |
+| Failed Logons               |                 20 |
+| Target Account              |   `reed.fernandez` |
+| Successful Login for Target |      None observed |
+| Process Creation            |          71 events |
+| Network Share Events        |                  3 |
+| Splunk Processes            |           Observed |
+| Malicious Process           |    None identified |
+| Lateral Movement            |      Not confirmed |
+| Account Compromise          |       Not observed |
 | Final Classification        | **False Positive** |
 
-The activity was assessed as consistent with **legitimate Splunk Universal Forwarder activity and/or an associated system configuration issue**. No evidence of successful account compromise or confirmed lateral movement was identified within the available telemetry.
+The observed activity was consistent with legitimate **Splunk Universal Forwarder** activity and/or an associated system configuration issue. No evidence of successful account compromise or confirmed lateral movement was identified within the available telemetry.
 
 ---
 
@@ -72,7 +72,8 @@ index="wineventlog" sourcetype="WinEventLog:Security"
 **Total Events:** 228
 
 **Assessment:**
-Event IDs 4625, 4688 and 5140/5145 were prioritized for further investigation.
+
+Events 4625, 4688, and 5140/5145 were selected for further investigation.
 
 ---
 
@@ -96,9 +97,12 @@ index="wineventlog" sourcetype="WinEventLog:Security" EventCode=4625
 | `reed.fernandez` | `-`            |              20 |
 
 **Assessment:**
-All 20 failed authentication events targeted the same account, `reed.fernandez`. The source network address was recorded as `-`, with no external source IP identified in the available events.
 
-The repeated attempts against a single account initially indicated possible brute-force activity. However, the available Event 4625 data did not provide evidence of a remote source.
+All 20 failed authentication events targeted `reed.fernandez`.
+
+The source network address was recorded as `-`. No external source IP was identified in the available Event 4625 records.
+
+The repeated failures initially indicated possible brute-force activity, requiring a successful authentication check.
 
 ---
 
@@ -117,6 +121,7 @@ index="wineventlog" sourcetype="WinEventLog:Security" EventCode=4624 reed.fernan
 **0 events returned.**
 
 **Assessment:**
+
 No successful authentication for `reed.fernandez` was observed in the investigated dataset.
 
 **Compromise:** Not observed.
@@ -131,11 +136,14 @@ No successful authentication for `reed.fernandez` was observed in the investigat
 
 ```spl
 index="wineventlog" sourcetype="WinEventLog:Security" EventCode=4688
+| rex field=_raw "(?i)New Process Name:\s*(?<Process_Name>[^\r\n]+)"
+| stats count by Process_Name
+| sort - count
 ```
 
 **Result:**
 
-The process events included:
+Observed processes included:
 
 * `splunk-powershell.exe`
 * `splunk-netmon.exe`
@@ -148,11 +156,10 @@ C:\Program Files\SplunkUniversalForwarder\bin\
 ```
 
 **Assessment:**
-The processes and installation path were consistent with **Splunk Universal Forwarder** components.
 
-No suspicious executable outside the expected Splunk directory was identified during the review.
+The observed processes and installation path were consistent with Splunk Universal Forwarder components.
 
-The presence of `splunk-powershell.exe` was investigated because PowerShell-related execution can be abused by attackers. However, the identified binary was associated with the legitimate Splunk installation.
+No suspicious executable outside the expected Splunk installation path was identified during the review.
 
 **Finding:** No malicious process execution confirmed.
 
@@ -160,21 +167,23 @@ The presence of `splunk-powershell.exe` was investigated because PowerShell-rela
 
 ## Phase 5 — Network Share Analysis
 
-**Objective:** Determine whether the network share activity represented possible lateral movement.
+**Objective:** Determine whether network share activity indicated possible lateral movement.
 
 **SPL Query:**
 
 ```spl
-index="wineventlog" sourcetype="WinEventLog:Security" EventCode=5140 OR EventCode=5145
+index="wineventlog" sourcetype="WinEventLog:Security" (EventCode=5140 OR EventCode=5145)
+| stats count by EventCode ComputerName
 ```
 
 **Result:**
 
 * Network share events: **3**
-* Observed timestamp: **04:59:57 PM**
-* Activity occurred during the same period as the Splunk process activity.
+* Activity occurred at approximately **04:59:57 PM**
+* Events correlated with the period of Splunk process activity.
 
 **Assessment:**
+
 Network share activity was observed, but the available evidence did not demonstrate:
 
 * Unauthorized administrative share access
@@ -189,50 +198,34 @@ Network share activity was observed, but the available evidence did not demonstr
 
 # 3. Investigation Correlation
 
-| Evidence         | Finding                                     | Assessment                    |
-| ---------------- | ------------------------------------------- | ----------------------------- |
-| 4625             | 20 failed logons                            | Suspicious initially          |
-| Target           | `reed.fernandez`                            | Single account                |
-| Source IP        | `-`                                         | No external IP identified     |
-| 4624             | No successful login for target              | No compromise observed        |
-| 4688             | 71 process creations                        | Investigated                  |
-| Process Names    | Splunk components                           | Legitimate activity           |
-| Process Path     | Splunk installation directory               | Expected                      |
-| 5140/5145        | 3 share events                              | No confirmed lateral movement |
-| Time Correlation | Share activity aligned with Splunk activity | Supports benign explanation   |
+| Evidence         | Finding                                     | Assessment                          |
+| ---------------- | ------------------------------------------- | ----------------------------------- |
+| Event 4625       | 20 failed logons                            | Suspicious initially                |
+| Target Account   | `reed.fernandez`                            | Single account                      |
+| Source Address   | `-`                                         | No external IP identified           |
+| Event 4624       | No successful login for target              | No compromise observed              |
+| Event 4688       | 71 process creations                        | Investigated                        |
+| Process Names    | Splunk components                           | Consistent with legitimate activity |
+| Process Path     | Splunk installation directory               | Expected                            |
+| Event 5140/5145  | 3 share events                              | No confirmed lateral movement       |
+| Time Correlation | Share activity aligned with Splunk activity | Supports benign explanation         |
 
-### Overall Assessment
-
-The events initially resembled a potential attack chain:
+### Investigation Flow
 
 ```text
 Failed Authentication
         ↓
 Possible Brute Force
         ↓
-Process Creation
-        ↓
-Possible Command Execution
-        ↓
-Network Share Activity
-        ↓
-Possible Lateral Movement
-```
-
-However, investigation did not identify the expected evidence of successful compromise.
-
-Instead:
-
-```text
-Failed Authentication
+Successful Login Check
         ↓
 No Successful Login
         ↓
-Legitimate Splunk Processes Identified
+Process Investigation
         ↓
-Network Share Activity Correlated
+Legitimate Splunk Processes
         ↓
-No Malicious Execution
+Network Share Investigation
         ↓
 No Confirmed Lateral Movement
         ↓
@@ -243,13 +236,13 @@ FALSE POSITIVE
 
 # 4. Indicators of Interest
 
-## Account
+### Account
 
 | Type           | Value            |
 | -------------- | ---------------- |
 | Target Account | `reed.fernandez` |
 
-## Hosts
+### Hosts
 
 | Host             |
 | ---------------- |
@@ -257,7 +250,7 @@ FALSE POSITIVE
 | `WIN-DC-697`     |
 | `WIN-HOST-816`   |
 
-## Processes
+### Processes
 
 | Process                 | Path                                             |
 | ----------------------- | ------------------------------------------------ |
@@ -272,33 +265,33 @@ FALSE POSITIVE
 ### Account / System Review
 
 * Review the `reed.fernandez` account configuration.
-* Identify the service, task, or process generating the repeated authentication failures.
+* Identify the service, scheduled task, or process generating the authentication failures.
 * Verify whether the account is active and expected on the affected hosts.
 
 ### Splunk Validation
 
-* Verify that Splunk Universal Forwarder is authorized on all affected hosts.
+* Verify that Splunk Universal Forwarder is authorized on the affected hosts.
 * Review the Forwarder configuration and service account.
 * Confirm that the observed binaries are legitimate.
 
 ### SIEM Tuning
 
 * Review the current brute-force detection logic.
-* Investigate whether legitimate Splunk activity is contributing to repeated false positives.
-* Use contextual conditions such as host, process path, account, and source address rather than simply excluding all Splunk activity.
+* Determine whether legitimate Splunk activity is contributing to the alert.
+* Use contextual conditions such as host, account, process path, and source address to reduce false positives.
 
 ### Monitoring
 
 Continue monitoring for:
 
 * Successful authentication involving `reed.fernandez`
-* External source IPs
+* External source IP addresses
 * Suspicious PowerShell activity
 * Unexpected process execution
 * Unusual SMB activity
 * Administrative share access
 
-Escalate to SOC Tier 2 if evidence of successful authentication, malicious execution, credential abuse, or confirmed lateral movement appears.
+Escalate to SOC Tier 2 if successful authentication, malicious execution, credential abuse, or confirmed lateral movement is observed.
 
 ---
 
@@ -315,7 +308,7 @@ Escalate to SOC Tier 2 if evidence of successful authentication, malicious execu
 | Network Share Events         | 3                                        |
 | Malicious Process Identified | **No**                                   |
 | Lateral Movement Confirmed   | **No**                                   |
-| Account Compromise Confirmed | **No**                                   |
+| Account Compromise Observed  | **No**                                   |
 | Final Classification         | **False Positive**                       |
 | Investigation Status         | **Complete**                             |
 
@@ -323,11 +316,11 @@ Escalate to SOC Tier 2 if evidence of successful authentication, malicious execu
 
 # 7. Analyst Conclusion
 
-The investigation identified 20 failed authentication attempts against `reed.fernandez`, followed by process creation and network share activity.
+The investigation identified **20 failed authentication attempts** against `reed.fernandez`. No successful authentication for the account was observed.
 
-No successful authentication for the targeted account was observed. The process investigation identified Splunk Universal Forwarder components operating from the expected installation directory, and the network share activity did not provide sufficient evidence of malicious lateral movement.
+Analysis of the 71 process creation events identified legitimate Splunk Universal Forwarder components operating from the expected installation directory. The three network share events did not provide sufficient evidence of malicious SMB activity or lateral movement.
 
-Based on the available telemetry, the activity is assessed as **legitimate Splunk-related activity rather than an active compromise**.
+Based on the available Windows Security telemetry, the activity is assessed as **benign Splunk-related activity rather than a confirmed security compromise**.
 
 **Final Disposition: FALSE POSITIVE — NO CONFIRMED COMPROMISE**
 
@@ -337,12 +330,12 @@ Based on the available telemetry, the activity is assessed as **legitimate Splun
 
 This assessment is based on the Windows Security telemetry available in the investigated Splunk dataset.
 
-The absence of malicious activity in this dataset does not prove that no compromise occurred through another source, time period, or attack vector.
+The absence of malicious activity in this dataset does not independently prove that no compromise occurred through another source, time period, or attack vector.
 
 Additional telemetry that could be reviewed includes:
 
 * Sysmon
-* EDR
+* EDR telemetry
 * PowerShell logs
 * Active Directory authentication logs
 * Splunk Universal Forwarder logs
@@ -365,16 +358,22 @@ The following techniques were considered during triage based on the observed eve
 
 ### MITRE Assessment
 
-The observed events initially resembled behaviors associated with multiple ATT&CK techniques. However, the supporting telemetry did not demonstrate malicious execution or successful attacker activity.
+The observed events initially resembled behaviors associated with several MITRE ATT&CK techniques. However, the investigation did not identify sufficient evidence to classify any of these techniques as **confirmed malicious activity**.
 
 **Confirmed malicious ATT&CK technique: None.**
 
 ---
 
-## Final SOC L1 Verdict
+# Final SOC L1 Verdict
 
-**Classification:** False Positive
-**Compromise:** Not observed
-**Lateral Movement:** Not confirmed
-**Primary Finding:** Legitimate Splunk Universal Forwarder activity
-**Action:** Close incident and review the underlying authentication/configuration issue.
+| Category           | Verdict                                                        |
+| ------------------ | -------------------------------------------------------------- |
+| Classification     | **FALSE POSITIVE**                                             |
+| Compromise         | **Not observed**                                               |
+| Brute Force        | **Not confirmed malicious**                                    |
+| Lateral Movement   | **Not confirmed**                                              |
+| Primary Finding    | **Legitimate Splunk Universal Forwarder activity**             |
+| Recommended Action | **Close incident + review authentication/configuration issue** |
+
+**Case Status: CLOSED — FALSE POSITIVE**
+
