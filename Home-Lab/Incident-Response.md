@@ -51,7 +51,7 @@ The activity was assessed as consistent with **legitimate Splunk Universal Forwa
 
 **Objective:** Identify the Windows Security events present in the dataset.
 
-**SPL:**
+**SPL Query:**
 
 ```spl
 index="wineventlog" sourcetype="WinEventLog:Security"
@@ -80,7 +80,7 @@ Event IDs 4625, 4688 and 5140/5145 were prioritized for further investigation.
 
 **Objective:** Identify the account targeted by the failed authentication activity.
 
-**SPL:**
+**SPL Query:**
 
 ```spl
 index="wineventlog" sourcetype="WinEventLog:Security" EventCode=4625
@@ -103,7 +103,7 @@ However, no external source IP was identified in the available events. The activ
 
 **Objective:** Determine whether the targeted account successfully authenticated.
 
-**SPL:**
+**SPL Query:**
 
 ```spl
 index="wineventlog" sourcetype="WinEventLog:Security" EventCode=4624 reed.fernandez
@@ -124,7 +124,7 @@ No successful authentication for `reed.fernandez` was observed in the investigat
 
 **Objective:** Determine whether the 71 process creation events represented malicious execution.
 
-**SPL:**
+**SPL Query:**
 
 ```spl
 index="wineventlog" sourcetype="WinEventLog:Security" EventCode=4688
@@ -159,7 +159,7 @@ The presence of `splunk-powershell.exe` was investigated because PowerShell-rela
 
 **Objective:** Determine whether the network share activity represented possible lateral movement.
 
-**SPL:**
+**SPL Query:**
 
 ```spl
 index="wineventlog" sourcetype="WinEventLog:Security" EventCode=5140 OR EventCode=5145
