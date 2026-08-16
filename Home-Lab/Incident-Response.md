@@ -347,9 +347,6 @@ The following data sources could provide greater visibility and enable deeper co
 * **SMB Audit Logs** — File and administrative share activity
 * **Windows Service & Scheduled Task Logs** — Potential persistence mechanisms
 
-> **Note:** These telemetry sources were not available in the current dataset and were therefore not used as evidence for the final incident classification.
-
-
 ---
 
 # 9. MITRE ATT&CK Mapping
