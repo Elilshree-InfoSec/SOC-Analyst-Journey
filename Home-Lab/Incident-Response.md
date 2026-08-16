@@ -351,18 +351,17 @@ The following data sources could provide greater visibility and enable deeper co
 
 # 9. MITRE ATT&CK Mapping
 
-The following techniques were considered during triage based on the observed event patterns.
+The following techniques were considered during triage based on the observed event patterns. These mappings represent investigative considerations and do not indicate confirmed malicious activity.
 
-| Tactic            | Technique                                          | Evidence                             | Assessment                     |
-| ----------------- | -------------------------------------------------- | ------------------------------------ | ------------------------------ |
-| Credential Access | **T1110 — Brute Force**                            | 20 failed logons against one account | Not confirmed malicious        |
-| Execution         | **T1059 — Command and Scripting Interpreter**      | `splunk-powershell.exe` observed     | Legitimate Splunk activity     |
-| Lateral Movement  | **T1021.002 — SMB/Windows Admin Shares**           | Events 5140/5145                     | Lateral movement not confirmed |
-| Discovery         | **T1016 — System Network Configuration Discovery** | `splunk-netmon.exe` observed         | Consistent with monitoring     |
+| Tactic | Technique | Evidence | Assessment |
+|---|---|---|---|
+| Credential Access | **T1110 — Brute Force** | 20 failed logons against one account | Not confirmed malicious |
+| Execution | **T1059 — Command and Scripting Interpreter** | `splunk-powershell.exe` observed | Consistent with legitimate Splunk activity |
+| Lateral Movement | **T1021.002 — SMB/Windows Admin Shares** | Events 5140/5145 observed | Lateral movement not confirmed |
 
 ### MITRE Assessment
 
-The observed events initially resembled behaviors associated with several MITRE ATT&CK techniques. However, the investigation did not identify sufficient evidence to classify any of these techniques as **confirmed malicious activity**.
+The observed events initially resembled behaviors associated with several MITRE ATT&CK techniques. However, the investigation did not identify sufficient evidence to classify any technique as confirmed malicious activity.
 
 **Confirmed malicious ATT&CK technique: None.**
 
