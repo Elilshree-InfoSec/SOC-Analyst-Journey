@@ -95,7 +95,6 @@ My approach is simple:
 - Splunk & SPL basics
 - Basic SOC alert triage
 - MITRE ATT&CK fundamentals
-- TryHackMe SOC labs
 - Personal SOC home lab
 
 ### 🔄 Currently Developing
