@@ -331,6 +331,3 @@ Non-DC machine --> requests directory replication data
 - Recognize tool names like **Mimikatz** and **BloodHound** in alerts/IOCs
 - Understand the basic **attack path**: Recon → Credential Access → Priv Esc → Lateral Movement → Domain Dominance
 
----
-
-*Notes for personal SOC study — Active Directory fundamentals*
