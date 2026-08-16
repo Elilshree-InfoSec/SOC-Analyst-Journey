@@ -78,24 +78,27 @@ Event IDs 4625, 4688 and 5140/5145 were prioritized for further investigation.
 
 ## Phase 2 — Failed Authentication Analysis
 
-**Objective:** Identify the account targeted by the failed authentication activity.
+**Objective:** Identify the targeted account, source address, and number of failed authentication attempts.
 
 **SPL Query:**
 
 ```spl
 index="wineventlog" sourcetype="WinEventLog:Security" EventCode=4625
+| rex field=_raw "Account Name:\s+(?<TargetUser>\S+)"
+| rex field=_raw "Source Network Address:\s+(?<Source_IP>\S+)"
+| stats count by TargetUser Source_IP
 ```
 
 **Result:**
 
-* Failed authentication events: **20**
-* Target account: **`reed.fernandez`**
-* Source Network Address: **`-`**
+| Target Account   | Source Address | Failed Attempts |
+| ---------------- | -------------- | --------------: |
+| `reed.fernandez` | `-`            |              20 |
 
 **Assessment:**
-20 failures against a single account initially indicated possible brute-force activity.
+All 20 failed authentication events targeted the same account, `reed.fernandez`. The source network address was recorded as `-`, with no external source IP identified in the available events.
 
-However, no external source IP was identified in the available events. The activity could therefore not be attributed to a remote attacker based on Event 4625 alone.
+The repeated attempts against a single account initially indicated possible brute-force activity. However, the available Event 4625 data did not provide evidence of a remote source.
 
 ---
 
