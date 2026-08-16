@@ -330,18 +330,25 @@ Based on the available Windows Security telemetry, the activity is assessed as *
 
 This assessment is based on the Windows Security telemetry available in the investigated Splunk dataset.
 
+The dataset did not contain **Sysmon, PowerShell Script Block Logging, EDR, dedicated network telemetry, or additional Active Directory audit logs**. Therefore, process execution, PowerShell activity, network connections, and domain authentication activity could not be independently correlated beyond the available Windows Security events.
+
 The absence of malicious activity in this dataset does not independently prove that no compromise occurred through another source, time period, or attack vector.
 
-Additional telemetry that could be reviewed includes:
+### Additional Telemetry for Future Investigation
 
-* Sysmon
-* EDR telemetry
-* PowerShell logs
-* Active Directory authentication logs
-* Splunk Universal Forwarder logs
-* Windows service and scheduled task logs
-* Firewall/network logs
-* SMB audit logs
+The following data sources could provide greater visibility and enable deeper correlation:
+
+* **Sysmon** — Detailed process, network, DNS, file, and process activity
+* **PowerShell Logs** — Script Block Logging and command execution details
+* **EDR Telemetry** — Endpoint process and behavioral activity
+* **Active Directory Logs** — Domain authentication and Kerberos activity
+* **Splunk Universal Forwarder Logs** — Endpoint collection and forwarding activity
+* **Firewall / Network Logs** — Network connections and traffic patterns
+* **SMB Audit Logs** — File and administrative share activity
+* **Windows Service & Scheduled Task Logs** — Potential persistence mechanisms
+
+> **Note:** These telemetry sources were not available in the current dataset and were therefore not used as evidence for the final incident classification.
+
 
 ---
 
