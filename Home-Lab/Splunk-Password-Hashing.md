@@ -271,5 +271,3 @@ No Successful Authentication Observed
 | <img width="1919" height="868" alt="Screenshot 2026-08-12 093625" src="https://github.com/user-attachments/assets/a7c886bd-3932-454d-b8c9-7c5fa6408024" /> | Splunk query output supporting investigation findings | 12 Aug 2026, 09:50 AM |
 
 
-*Report prepared by SOC Level 1 Analyst. This document is intended for internal security operations use and should be handled in accordance with organizational data classification policy.*
-
