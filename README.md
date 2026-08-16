@@ -1,54 +1,129 @@
 # 🛡️ SOC Analyst Journey
 
-Welcome to my cybersecurity learning portfolio.
+> Building practical cybersecurity skills through hands-on labs, investigations, projects, and continuous learning.
 
-This repository documents my journey towards becoming a SOC Analyst through:
+I'm a **Computer Systems & Network student at Universiti Malaya** working towards a career in **Cybersecurity, with a focus on Blue Team / SOC operations**.
 
-- 🎓 Certifications
-- 🛠️ Projects
-- 🧪 Hands-on Labs
-- 💻 Python Security Tools
-- 📚 Technical Notes
-- 📝 Daily Progress
+This repository documents my learning journey — including the things I build, investigate, learn, and improve along the way.
 
 ---
 
-# 🎯 Goal
+## 🎯 Current Goal
 
-Secure a SOC Analyst Internship by building strong cybersecurity fundamentals and practical skills.
+**Become internship-ready for a SOC / Cybersecurity role by building strong fundamentals and practical investigation skills.**
+
+My current focus:
+
+- 🔎 Security Monitoring & Log Analysis
+- 🛡️ Blue Team / SOC Operations
+- 📊 SIEM & Splunk
+- 🪟 Windows Security
+- 🐧 Linux
+- 🐍 Python for Cybersecurity
+- 🧩 MITRE ATT&CK
+- 🚨 Incident Investigation
 
 ---
 
-# 📅 60-Day Challenge
+## 🧪 What You'll Find Here
 
-## SOC Analyst Pathway
+| Section | Contents |
+|---|---|
+| 🛡️ Cybersecurity Fundamentals | Security concepts, attacks & defensive knowledge |
+| 📊 Splunk | SIEM, SPL, log analysis & investigations |
+| 🪟 Windows Security | Event Logs, Event IDs, Sysmon & PowerShell basics |
+| 🐧 Linux | SOC-relevant commands & security fundamentals |
+| 🐍 Python | Python learning & cybersecurity projects |
+| 🔬 Home Lab | Hands-on security experiments and investigations |
+| 🧪 TryHackMe | Completed rooms and personal notes |
+| 🌐 Networking | Networking concepts & security-related notes |
+| 🗂️ Active Directory | Learning notes and fundamentals |
 
-| No. | Start Date | Completion Date | Activity | Category | Skills Learned | Status |
-|---|---|---|---|---|---|---|
-| 1 | 5 Jul 2026 | 8 Jul 2026 | Cisco — Python Essentials 1 | Certification | Python fundamentals | ✅ |
-| 2 | 8 Jul 2026 | 9 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: The Cybersecurity Landscape | Learning Pathway | Cybersecurity fundamentals | ✅ |
-| 3 | 19 Jul 2026 | 20 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Understanding Threats and Attacks | Learning Pathway | Threats & vulnerabilities | ✅ |
-| 4 | 20 Jul 2026 | 21 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Security Operations and the Defense Analyst | Learning Pathway | SOC fundamentals | ✅ |
-| 5 | 21 Jul 2026 | 24 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Data and Tools for Defense Analysts | Learning Pathway | SOC tools & analysis | ✅ |
-| 6 | 24 Jul 2026 | 25 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: The Art of Investigation | Learning Pathway | Investigation process | ✅ |
-| 7 | 26 Jul 2026 | 30 Jul 2026 | Splunk Learning - SIEM , SPL Language , Lab | Self Learning | Splunk | ✅ |
-| 8 | 29 Jul 2026 | 31 Jul 2026 | Blue Team Academy — Cyber Defense Analyst: Introduction to Threat Hunting | Learning Pathway Completed | Threat Hunting | ✅ |
-| 9 | 29 Jul 2026 | 1 Aug 2026 | Python - SOC Log Analyzer | Project | Log Analyzer | ✅ |
-
-
-## Additional Learning & Projects
-
-| No. | Start Date | Completion Date | Activity | Category | Skills Learned | Status |
-|---|---|---|---|---|---|---|
-| 2 | 9 Jul 2026 | 22 Jul 2026 | ParkUM | Project | Java, OOP, Data Structures | ✅ |
-| 3 | 23 Jul 2026 | 23 Jul 2026 | National Training Week 2026 (NTW) — An Introduction to Cyberlaw: Rights, Responsibilities & Legal Risks in Cyberspace | Workshop | Cyberlaw basics | ✅ |
 ---
 
-## 📌 Progress - SOC Only
+## 🔎 Hands-On Work
 
-- 🎓 Certifications: 2
-- 🛠️ Projects: 1
-- 🧪 Labs: 2
-- 💻 Security Tools: 1
+### Password Spraying Investigation
 
-*(This section will be updated throughout my learning journey.)*
+Built and investigated a password-spraying scenario using my personal **Splunk home lab**.
+
+**Investigation included:**
+- Log searching & analysis
+- Alert triage
+- Authentication activity investigation
+- Password spraying identification
+- MITRE ATT&CK mapping — `T1110.003`
+- Incident documentation
+
+---
+
+## 💻 Projects
+
+### 🐍 Python SOC Log Analyzer
+A Python-based project focused on analysing security log data and identifying suspicious activity.
+
+> More projects will be added as I continue developing my practical skills.
+
+---
+
+## 🧪 Learning Through Practice
+
+I use platforms such as:
+
+- TryHackMe
+- Splunk
+- Cisco Networking Academy
+- Security Blue Team
+- Forage
+- MITRE ATT&CK
+
+My approach is simple:
+
+**Learn → Practise → Investigate → Document → Improve**
+
+---
+
+## 📈 Roadmap
+
+### ✅ Completed / Current Foundation
+- Cybersecurity fundamentals
+- Networking fundamentals
+- Python fundamentals
+- Linux basics
+- Windows security logging
+- SIEM fundamentals
+- Splunk & SPL basics
+- Basic SOC alert triage
+- MITRE ATT&CK fundamentals
+- TryHackMe SOC labs
+- Personal SOC home lab
+
+### 🔄 Currently Developing
+- Deeper Splunk investigation skills
+- SOC investigation methodology
+- Linux security
+- Incident investigation
+- Python for cybersecurity
+
+### 🚀 Future Focus
+- EDR
+- Threat Hunting
+- Network Traffic Analysis
+- Cloud Security Fundamentals
+- Red Team Fundamentals
+
+---
+
+## 📌 Philosophy
+
+> **I don't want to just collect certificates. I want to understand what I learn well enough to investigate, explain, and apply it.**
+
+This repository is a record of that process.
+
+---
+
+### 👩🏻‍💻 Elilshree
+**Computer Systems & Network | Universiti Malaya**  
+**Aspiring Cybersecurity / SOC Analyst**
+
+[LinkedIn](www.linkedin.com/in/elilshree-prabhakaran-282488300) • [GitHub](https://github.com/Elilshree23)
